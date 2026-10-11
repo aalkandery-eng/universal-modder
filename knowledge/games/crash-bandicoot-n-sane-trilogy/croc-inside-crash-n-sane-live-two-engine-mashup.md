@@ -256,6 +256,17 @@ feel and attacks.
     slam then breaks what's below and shows the impact dust.
   - **Edges:** take key edges from `GetAsyncKeyState`. The game's own sources disagree for a few ms and
     create fake re-presses.
+- **Vehicle levels** (Crash 3's biplane):
+  - **Detection:** no on-foot capsule or controller body exists, and the level-state flag reads 0 for the whole
+    level, so vehicle mode keys on "Crash's skinned model is drawn and keeps moving" (menus stay put).
+  - **What sits at the player:** three groups of draw: Crash's body (4016-byte buffer), his pilot outfit
+    (other buffers, another vertex shader) and the vehicle (one vertex shader with the most draws there).
+  - **What to hide:** everything at the player except the vehicle's shader. Croc then sits alone in the
+    cockpit, and the pause preview shows it too.
+  - **Plane deaths:** the parachute sequence still shows Crash.
+- **Character UI:** a "[F6] PLAY AS CROC/CRASH" hint on entering an area, and a banner on switching. The text
+  is drawn with GDI into textures and over the HUD at present. Read F6 from the game window's own
+  `WM_KEYDOWN`/`WM_SYSKEYDOWN`; polling missed presses.
 - **Test tooling:** `um win drive "idle N"` doesn't wait; it reports seconds since the last input. For timed
   combos, put the whole combo in one drive call: separate calls are too slow, because each one starts
   PowerShell. Pauses inside a call need the `sleep <ms>` verb from #206; without it, use `hold <vk> <ms>` or
@@ -271,7 +282,7 @@ redistributed.
 About one day of agent time over three sessions, with the human mostly away.
 
 ## Open questions
-- **Native port follow-ups:** a character-select UI (F6 only now), Crash 2/3 vehicles and Coco levels, bonus rounds,
-  gamepad filter verification with a real controller, user rebinding support.
+- **Native port follow-ups:** jet-ski/bike/car levels, Coco levels, bonus rounds, plane-level deaths, gamepad
+  filter verification with a real controller, user rebinding support.
 - **Remaining issues (live mashup):**
   - pose lag of 1–3 frames during fast camera moves (reproject).
