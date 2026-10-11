@@ -404,6 +404,30 @@ def test_compile_small_edl(tmp_path):
     assert abs(info["duration"] - (2 + 2 + 1.5)) < 0.15 and info["audio"]
 
 
+@pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="needs ffmpeg")
+def test_compile_cut_then_fade(tmp_path, monkeypatch):
+    # a cut then a fade: xfade's first input is concat's output (AVTB), so every join input must end at AVTB.
+    # FFmpeg 7.0/7.1's setpts marks the frame rate unknown (1/0), which xfade refuses, so each join input also
+    # declares fps=. Newer FFmpeg passes without it, hence the graph check.
+    calls, real_ff = [], video.ff
+
+    def spy(*args, **kw):
+        calls.append([str(a) for a in args])
+        return real_ff(*args, **kw)
+
+    monkeypatch.setattr(video, "ff", spy)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=s=640x360:d=2:r=24", "-f", "lavfi", "-i", "sine=f=440:d=2",
+                    "-shortest", str(tmp_path / "c.mp4")], check=True)
+    edl = {"size": [640, 360], "fps": 24, "transition": {"type": "cut"},
+           "segments": [{"clip": "c.mp4", "dur": 1.0}, {"clip": "c.mp4", "in": 0.5, "dur": 1.0},
+                        {"card": {"title": "The end"}, "dur": 1.0, "transition": {"type": "fade", "duration": 0.25}}]}
+    (tmp_path / "edl.json").write_text(json.dumps(edl))
+    video.compile_edl(tmp_path / "edl.json", str(tmp_path / "out.mp4"))
+    graph = calls[-1][calls[-1].index("-filter_complex") + 1].split(";")
+    assert all(any(g.startswith(f"[{k}:v]") and "fps=24" in g for g in graph) for k in range(3))
+    assert abs(video.probe(tmp_path / "out.mp4")["duration"] - (1 + 1 + 1 - 0.25)) < 0.15
+
+
 # --------------------------------------------------------------------------- knowledge base
 
 from um import kb  # noqa: E402

@@ -457,9 +457,11 @@ def compile_edl(edl_path, out, preview=False, keep=False):
     inputs, graph = [], []
     for f in files:
         inputs += ["-i", f]
-    for k in range(len(files)):   # one timebase and a declared constant rate for every input: concat and xfade
-        # refuse to mix timebases, and xfade rejects inputs whose frame rate reads 1/0 after settb (Matroska segments)
-        graph.append(f"[{k}:v]settb=AVTB,setpts=PTS-STARTPTS,fps={fps}[s{k}]")
+    for k in range(len(files)):
+        # xfade needs one timebase and a declared frame rate on both inputs. FFmpeg 7.0/7.1's setpts marks its output
+        # rate unknown (1/0), so fps= declares it again; settb=AVTB comes last because fps= sets 1/fps and concat
+        # (a cut) outputs AVTB, which a later xfade must match
+        graph.append(f"[{k}:v]setpts=PTS-STARTPTS,fps={fps},settb=AVTB[s{k}]")
     total = durs[0]
     vlast, alast = "s0", "0:a"
     for k in range(1, len(files)):
