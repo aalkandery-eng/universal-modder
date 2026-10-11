@@ -1033,6 +1033,54 @@
   ]
  },
  {
+  "path": "games/elden-ring/porting-dark-souls-remastered-enemies-into-elden-ring.md",
+  "kind": "game",
+  "title": "Porting a Dark Souls Remastered enemy into Elden Ring as a new character (Hollow c2500 -> c7250): skeleton, animations, ragdoll, params, AI and sounds",
+  "game": "Elden Ring",
+  "games_also": [
+   "Dark Souls Remastered"
+  ],
+  "game_version": "Elden Ring 1.17.1 (exe 2.7.1.0), Steam, Windows 10 22H2; Dark Souls Remastered (Steam, loose files unpacked) as the source",
+  "platform": "windows",
+  "engine": "fromsoft",
+  "route": "data",
+  "tools": [
+   "ModEngine 2 (2024-10 dev build; the 2.1.0.0 release does NOT load sound banks)",
+   "WitchyBND (Paramdex, TAE/BND/TPF repack)",
+   "HKLib.CLI (Havok 2018 tagfile <-> XML, read-only use for physics)",
+   "soulstruct (Python, patched hk2018 writer)",
+   "BinderKeys (ER archive keys/names)",
+   "texconv",
+   "vgmstream-cli r2117",
+   "Wwise 2019.2.15.7667 Authoring (WwiseConsole, free licence)",
+   "Python 3.13 (Blender's bundled interpreter) + numpy/scipy"
+  ],
+  "anti_cheat": "EasyAntiCheat never touched: ModEngine 2 starts eldenring.exe without EAC, so the game runs offline; no Seamless/online use with these files",
+  "status": "working",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-11",
+  "links": [],
+  "tags": [
+   "enemy-port",
+   "cross-game",
+   "new-character",
+   "havok",
+   "ragdoll",
+   "tae",
+   "behaviorparam",
+   "atkparam",
+   "npcparam",
+   "throwparam",
+   "ai-lua",
+   "wwise",
+   "soundbank",
+   "modengine2"
+  ]
+ },
+ {
   "path": "games/factorio/factorio.md",
   "kind": "game",
   "title": "Factorio 2.0 recon: official Lua mod API, info.json, mods under %APPDATA%",
@@ -1526,6 +1574,55 @@
    "fabric",
    "shields",
    "vehicles"
+  ]
+ },
+ {
+  "path": "games/halo-combat-evolved/halo-ce-elden-ring-combat-in-opence.md",
+  "kind": "game",
+  "title": "Elden Ring's real combat, AI, animation and bodies running inside the Halo CE decomp (OpenCE)",
+  "game": "Halo: Combat Evolved",
+  "games_also": [
+   "Elden Ring"
+  ],
+  "game_version": "Halo: Combat Evolved (USA) Xbox disc data (default.xbe) run by OpenCE commit 76b1898 (2026-10-07, Windows build: clang + the MSVC x86 libraries, via ninja); Elden Ring 1.17.1 (eldenring.exe 2.7.1.0, Steam) read offline as the data/logic source",
+  "platform": "windows",
+  "engine": "native",
+  "route": "decomp-recomp",
+  "tools": [
+   "OpenCE (Halo CE Xbox decomp source port)",
+   "Lua 5.1.5 + LuaJIT 2.1 (embedded)",
+   "DSLuaDecompiler (katalash, built with .NET 9)",
+   "WitchyBND 3.0.1.0",
+   "Nuxe 1.2.1 (only its BinderKeys)",
+   "HKLib CLI v0.1.2",
+   "Ghidra 12.1.4 headless + Temurin JDK 21",
+   "vgmstream-cli",
+   "Python 3.14 + Pillow"
+  ],
+  "anti_cheat": "Elden Ring has EasyAntiCheat: never launched, patched or hooked. Its install is only read (read-only extraction of params, HKS scripts, Havok files, FLVERs, textures, sound banks); eldenring.exe is analysed as a COPY in Ghidra. Halo runs offline/LAN only in the user's own build.",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-10",
+  "links": [
+   "https://github.com/OpenCommunityEdition/OpenCE"
+  ],
+  "tags": [
+   "mashup",
+   "decomp",
+   "hks",
+   "havok",
+   "behavior-graph",
+   "retarget",
+   "hitboxes",
+   "poise",
+   "ai-goals",
+   "wwise",
+   "co-op",
+   "skinned-mesh",
+   "lua-vm"
   ]
  },
  {
@@ -2586,8 +2683,7 @@
   "engine": "java",
   "route": "loader-api",
   "tools": [
-   "Python 3.12 (own scripts for mod.info scanning",
-   "preset writing and log triage)",
+   "Python 3.12 (own scripts for mod.info scanning, preset writing and log triage)",
    "Steam Web API",
    "grep"
   ],
@@ -2977,6 +3073,75 @@
    "explosions",
    "camera",
    "showcase-video"
+  ]
+ },
+ {
+  "path": "games/terraria/super-smash-bros-melee-s-decompiled-engine-inside-terraria-a.md",
+  "kind": "game",
+  "title": "Super Smash Bros. Melee's decompiled engine inside Terraria: a native DLL under tModLoader, 3D fighters, its engine replayed bit-exact against Slippi Dolphin recordings",
+  "game": "Terraria",
+  "games_also": [
+   "Super Smash Bros. Melee"
+  ],
+  "game_version": "Terraria 1.4.4.9 on tModLoader 2026.08.3.0 (Steam, Windows 11, .NET 8, FNA 23.10); guest: Super Smash Bros. Melee NTSC-U 1.02 (GALE01, revision 2) with Slippi's $Required codes, minus UCF",
+  "platform": "windows",
+  "engine": "xna-fna",
+  "route": "decomp-recomp",
+  "tools": [
+   "tModLoader 2026.08.3.0",
+   "melee-pc (PC port of doldecomp/melee)",
+   "mingw-w64 GCC 13 (posix) in WSL Ubuntu 24.04",
+   "CMake 3.28 + Ninja",
+   "Slippi Dolphin 3.6.4",
+   "libmelee 0.47.3",
+   "DolphinTool",
+   "HSDRaw (HSDLib)",
+   "FNA 23.10",
+   "own PowerPC disassembler and interpreter",
+   "own read-only Dolphin RAM reader",
+   "Grok"
+  ],
+  "anti_cheat": "none. Terraria single player in a separate lab save folder; Melee runs only offline, in a lab copy of Slippi Dolphin used as the oracle, never on Slippi online or netplay",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code and agents",
+   "Grok"
+  ],
+  "humans": [
+   "DarkameMaster"
+  ],
+  "date": "2026-10-10",
+  "links": [
+   "https://github.com/999sian/melee-pc",
+   "https://github.com/doldecomp/melee",
+   "https://github.com/Ploaj/HSDLib",
+   "https://github.com/project-slippi/Ishiiruka",
+   "https://github.com/project-slippi/slippi-ssbm-asm",
+   "https://github.com/altf4/libmelee",
+   "https://dolphin-emu.org/",
+   "https://github.com/tModLoader/tModLoader",
+   "https://github.com/FNA-XNA/FNA",
+   "https://www.mingw-w64.org/",
+   "https://github.com/rehan-remade/universal-modder"
+  ],
+  "tags": [
+   "mashup",
+   "decomp",
+   "native-dll",
+   "pinvoke",
+   "trace-replay",
+   "bit-exact",
+   "float32",
+   "fma",
+   "slippi",
+   "libmelee",
+   "gamecube",
+   "3d",
+   "cpu-skinning",
+   "lighting",
+   "xinput",
+   "hit-bridge",
+   "multi-agent"
   ]
  },
  {
@@ -3397,7 +3562,7 @@
    "fog",
    "dgvoodoo",
    "rts",
-   2004
+   "2004"
   ]
  },
  {
@@ -3933,8 +4098,7 @@
   "route": "data",
   "tools": [
    "StormLib / smpq (in WSL)",
-   "Python 3.12 (BLP scanner",
-   "repair and encoder)",
+   "Python 3.12 (BLP scanner, repair and encoder)",
    "a minidump parser",
    "capstone"
   ],
@@ -3974,9 +4138,7 @@
   "engine": "native",
   "route": "data",
   "tools": [
-   "Python 3.12 (CASC/DB2 readers",
-   "BLP writer",
-   "M2/skin editor)",
+   "Python 3.12 (CASC/DB2 readers, BLP writer, M2/skin editor)",
    "numpy",
    "scipy",
    "Pillow",
@@ -4140,8 +4302,7 @@
   "engine": "native",
   "route": "asset-only",
   "tools": [
-   "Python 3.12 (own M2/.skin writer",
-   "BLP and DBC tools)",
+   "Python 3.12 (own M2/.skin writer, BLP and DBC tools)",
    "numpy",
    "Pillow",
    "Blender",
@@ -4418,6 +4579,47 @@
    "https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format",
    "https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format/TES4",
    "https://tes5edit.github.io/fopdoc/Fallout4/Records.html"
+  ]
+ },
+ {
+  "path": "techniques/bit-exact-decomp-ports-reproduce-the-original-compiler-s-and.md",
+  "kind": "technique",
+  "title": "Bit-exact decomp ports: reproduce the original compiler's and math library's floating point (and the oracle's own patches)",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code and agents",
+   "Grok"
+  ],
+  "humans": [
+   "DarkameMaster"
+  ],
+  "date": "2026-10-10",
+  "links": [
+   "https://github.com/999sian/melee-pc",
+   "https://github.com/doldecomp/melee",
+   "https://github.com/project-slippi/slippi-ssbm-asm",
+   "https://github.com/altf4/libmelee"
+  ],
+  "tags": [
+   "decomp",
+   "port",
+   "floating-point",
+   "float32",
+   "fma",
+   "fmadds",
+   "paired-singles",
+   "mwcc",
+   "msl",
+   "musl",
+   "mingw",
+   "bit-exact",
+   "trace-replay",
+   "determinism",
+   "oracle",
+   "slippi",
+   "gecko",
+   "gamecube",
+   "powerpc"
   ]
  },
  {
@@ -5170,6 +5372,44 @@
   ]
  },
  {
+  "path": "techniques/hosting-a-decompiled-console-engine-as-a-native-dll-inside-a.md",
+  "kind": "technique",
+  "title": "Hosting a decompiled console engine as a native DLL inside a .NET game mod",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code and agents",
+   "Grok"
+  ],
+  "humans": [
+   "DarkameMaster"
+  ],
+  "date": "2026-10-10",
+  "links": [
+   "https://github.com/999sian/melee-pc",
+   "https://github.com/doldecomp/melee",
+   "https://github.com/tModLoader/tModLoader",
+   "https://www.mingw-w64.org/"
+  ],
+  "tags": [
+   "decomp",
+   "native-dll",
+   "pinvoke",
+   "tmodloader",
+   "dotnet",
+   "c-api",
+   "abi",
+   "stubs",
+   "arena",
+   "crash-guard",
+   "snapshot",
+   "rollback",
+   "determinism",
+   "versioning",
+   "mashup",
+   "gamecube"
+  ]
+ },
+ {
   "path": "techniques/installers-load-order-and-loaded-code-checks.md",
   "kind": "technique",
   "title": "Installers, load order and loaded-code checks for multi-part mods",
@@ -5337,6 +5577,31 @@
    "@rehan_shei"
   ],
   "links": []
+ },
+ {
+  "path": "techniques/prove-your-replay-bench-can-fail-mutant-builds-exposed-four-.md",
+  "kind": "technique",
+  "title": "Prove your replay bench can fail: mutant builds exposed four false greens and two false reds",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code and agents"
+  ],
+  "humans": [
+   "DarkameMaster"
+  ],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "oracle",
+   "verification",
+   "mutation-testing",
+   "bench",
+   "replay",
+   "determinism",
+   "rollback",
+   "native-dll",
+   "false-green"
+  ]
  },
  {
   "path": "techniques/ps3-elf-analysis-in-ghidra.md",
@@ -5543,12 +5808,13 @@
    "audio-sync",
    "showcase"
   ],
-  "date": "2026-09-30",
+  "date": "2026-10-10",
   "agents": [
    "Claude Code (Opus 5.5)"
   ],
   "humans": [
-   "@rehan_shei"
+   "@rehan_shei",
+   "DarkameMaster"
   ],
   "links": []
  },
@@ -5629,6 +5895,33 @@
   ]
  },
  {
+  "path": "techniques/running-several-isolated-tmodloader-test-instances-in-parall.md",
+  "kind": "technique",
+  "title": "Running several isolated tModLoader test instances in parallel, and never touching the player's own",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code and agents"
+  ],
+  "humans": [
+   "DarkameMaster"
+  ],
+  "date": "2026-10-10",
+  "links": [
+   "https://github.com/tModLoader/tModLoader"
+  ],
+  "tags": [
+   "tmodloader",
+   "terraria",
+   "lab",
+   "parallel",
+   "process-classification",
+   "safety",
+   "automation",
+   "windows",
+   "harness"
+  ]
+ },
+ {
   "path": "techniques/running-xedit-and-windows-modding-tools-on-linux.md",
   "kind": "technique",
   "title": "Running xEdit (and other Delphi/Windows modding tools) on Linux: Wine/Proton patches",
@@ -5658,6 +5951,43 @@
    "https://gitlab.winehq.org/wine/wine",
    "https://github.com/TES5Edit/TES5Edit",
    "https://github.com/j00ru/windows-syscalls"
+  ]
+ },
+ {
+  "path": "techniques/skinned-3d-models-inside-tmodloader-posed-by-an-external-eng.md",
+  "kind": "technique",
+  "title": "Skinned 3D models inside tModLoader, posed by an external engine and matched to the original frame by frame",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code and agents",
+   "Grok"
+  ],
+  "humans": [
+   "DarkameMaster"
+  ],
+  "date": "2026-10-10",
+  "links": [
+   "https://github.com/Ploaj/HSDLib",
+   "https://github.com/FNA-XNA/FNA",
+   "https://github.com/tModLoader/tModLoader",
+   "https://github.com/project-slippi/slippi-ssbm-asm"
+  ],
+  "tags": [
+   "tmodloader",
+   "terraria",
+   "fna",
+   "3d",
+   "cpu-skinning",
+   "render-target",
+   "pose",
+   "animation",
+   "dynamic-bones",
+   "lighting",
+   "oracle",
+   "ram-dump",
+   "mashup",
+   "hsd",
+   "gamecube"
   ]
  },
  {
@@ -5833,6 +6163,30 @@
   ],
   "humans": [
    "Selene0623"
+  ]
+ },
+ {
+  "path": "techniques/when-the-first-real-run-fails-suspect-the-oracle-re-deriving.md",
+  "kind": "technique",
+  "title": "When the first real run fails, suspect the oracle: re-deriving failures from raw traces and mutating real data",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code and agents"
+  ],
+  "humans": [
+   "DarkameMaster"
+  ],
+  "date": "2026-10-10",
+  "links": [],
+  "tags": [
+   "oracle",
+   "verification",
+   "first-real-run",
+   "trace-analysis",
+   "mutation-testing",
+   "collision",
+   "tmodloader",
+   "mashup"
   ]
  },
  {
