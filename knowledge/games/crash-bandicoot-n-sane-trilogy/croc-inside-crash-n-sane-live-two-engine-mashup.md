@@ -1,8 +1,8 @@
 ---
 kind: game
-title: 'Croc inside Crash N. Sane: live two-engine mashup'
+title: 'Croc inside Crash N. Sane: live two-engine mashup and native port'
 game: Crash Bandicoot N. Sane Trilogy
-games_also: [Croc Legend of the Gobbos (2025 remaster)]
+games_also: ["Croc: Legend of the Gobbos (2025 remaster)"]
 game_version: 'Steam 731490, exe PE timestamp 2018-07-19 (sha256 170c61d3...6af3); Croc remaster GOG 1152820153 build 58936832420733913'
 platform: windows
 engine: native
@@ -13,11 +13,11 @@ status: working
 agents:
 - Claude Code (Opus 5.5)
 humans: []
-date: '2026-10-09'
+date: '2026-10-10'
 links: []
 tags: [alchemy-engine, mashup, passthrough, frame-compositing, reshade-addon, d3d11, d3d12, depth-compositing, render-hijack, input-forwarding, character-controller, hardware-breakpoint]
 ---
-# Croc inside Crash N. Sane: live two-engine mashup
+# Croc inside Crash N. Sane: live two-engine mashup and native port
 
 > The real Croc (Croc remaster, D3D12) runs as a second process. His engine draws only Croc, through Crash's
 > camera, and the picture is depth-composited into Crash's frame (D3D11) with Crash hidden.
@@ -28,6 +28,10 @@ tags: [alchemy-engine, mashup, passthrough, frame-compositing, reshade-addon, d3
 >   breaking crates, pit death and respawn, game over and retry, pause).
 
 ## Setup
+- **Games:** both are the user's own copies. Crash Bandicoot N. Sane Trilogy from Steam (its exe is
+  SteamStub-wrapped and is never modified on disk). Croc is the 2025 remaster, *Croc: Legend of the Gobbos*
+  from GOG (DRM-free, released 2 April 2025; also on consoles). The 1997 PC original isn't sold any more and
+  isn't needed: everything Croc-side comes from the remaster's own install (`remaster/` and `gdata/`).
 - **Install:**
   - Crash: ReShade64.dll as `d3d11.dll` (Crash imports d3d11 directly).
   - Croc: ReShade as `ReShade64.asi`, loaded by the Ultimate ASI Loader installed as `version.dll`.
@@ -48,6 +52,11 @@ tags: [alchemy-engine, mashup, passthrough, frame-compositing, reshade-addon, d3
   "both games running live".
 - **Not used:** a whole-frame overlay of Croc's own level. It looks pasted on; skipping every non-Croc draw
   gives a clean character layer with true depth.
+- **Related:** Stage A is the frame-compositing route (`techniques/frame-compositing-depth-and-pose-sync.md`;
+  the other ReShade add-on compositor is `games/gta-v/minecraft-passthrough.md`). Stage B's split (Croc owns
+  movement, Crash owns collision, lives and camera, and takes the player back on death) is an ownership choice
+  of the kind `techniques/bridge-contracts-ownership-units-and-lifecycle.md` asks you to write down. The native
+  port is Pattern 1 in `skills/mashup-mods/SKILL.md`: the guest's assets converted from the user's install.
 
 ## How the game works (what we had to learn)
 **Crash (Alchemy, D3D11)**
@@ -85,8 +94,8 @@ tags: [alchemy-engine, mashup, passthrough, frame-compositing, reshade-addon, d3
   - Croc's body parts are the draws whose world translation sits at the player.
   - Rewriting @0 at draw time (world × Croc→Crash mapping × Crash VP) and skipping other perspective draws
     renders only Croc, seen through Crash's camera.
-- **Depth:** Croc's depth target is reached through D3D12 render passes (`begin_render_pass`, not
-  bind_render_targets). Format R32_TYPELESS (39 → decode as float).
+- **Depth:** Croc's depth target is reached through D3D12 render passes (ReShade's `begin_render_pass` event,
+  not `bind_render_targets_and_depth_stencil`). Format R32_TYPELESS (39 → decode as float).
 - **Player struct:** `[Croc64.exe+0xB26800]`. Fixed point 1/4096: x @+0x7B0, y @+0x7B4 (Y down), z @+0x7B8,
   previous position @+0x7C8.
   - The float at exe+0xA79AF8 only mirrors the camera target: a setter at exe+0x1CC740 is called from
@@ -112,7 +121,7 @@ tags: [alchemy-engine, mashup, passthrough, frame-compositing, reshade-addon, d3
   camera candidate against the real depth buffer (≈ 0.001).
 - **Seen working:** occlusion behind crates, walking, jumps, a spin breaking crates, Aku Aku pickup, pit death
   and respawn, game over and retry, pause.
-- **Not verified:**
+- **Not verified (live mashup; the native port's checks are at the end of its section):**
   - vehicle and riding levels and bosses;
   - other levels' camera behaviour, beyond Jungle Rollers and the Crash 2 warp room;
   - long play sessions;
@@ -156,7 +165,6 @@ tags: [alchemy-engine, mashup, passthrough, frame-compositing, reshade-addon, d3
 16. **The screenshot oracle lied twice.** **Cause:** window capture freezes in exclusive fullscreen; a 1 s
     capture start misses a 0.4 s spin; an injected PrintScreen with Ctrl held is not ReShade's key.
     **Fix:** ReShade screenshots or short recordings tiled into frames.
-
 17. **Croc slid and drifted in Stage B.** **Cause:** his level (2-4) is ice, so his real physics slide.
     **Fix:** run him in a grass level (1-1); also apply his motion only while a move key is held (+0.6 s coast)
     or while airborne.
@@ -167,7 +175,9 @@ tags: [alchemy-engine, mashup, passthrough, frame-compositing, reshade-addon, d3
     copy, 1×1 mip) and scale Croc by luminance / 0.2.
 20. **"Croc ignores arrows after respawn".** **Cause:** tank controls; Left/Right turn on the spot. Not a bug.
 21. **Crash's death played with nobody on screen** (Crash hidden, Croc standing idle). **Fix:** hand back while
-    `exe+0x1a59210 == 0` (see Death state). Verified on pit, TNT and enemy (crab) deaths: Crash's own death animations play. Latch on the alive → 0 edge; end on the flag going alive or on a horizontal respawn teleport, not on losing the player capsule (it vanishes during enemy deaths).
+    `exe+0x1a59210 == 0` (see Death state). Latch on the alive → 0 edge; end on the flag going alive or on a
+    horizontal respawn teleport, not on losing the player capsule (it vanishes during enemy deaths). Verified on
+    pit, TNT and enemy (crab) deaths: Crash's own death animations play.
 22. **Croc drawn over the HUD.** **Fix:** composite into Crash's intermediate final texture at the first draw
     that has no depth target bound (the HUD pass), not at present.
 23. **The pause menu's level preview showed only Crash's shadow.** **Cause:** the preview is a still: a separate
@@ -227,7 +237,8 @@ feel and attacks.
 - **Deaths:** play `crocdie1` and draw Croc at any G-buffer draw while dying.
 - **Choice:** F6 switches between Crash and Croc and saves to the add-on's ini.
 - **Cache location:** the converter writes the rig into a local cache next to the mod, not
-  `%LOCALAPPDATA%`; sandboxed writes there may be virtualised.
+  `%LOCALAPPDATA%`; sandboxed writes there may be virtualised. The cache is converted Croc data: keep it out
+  of any repository and don't share it.
 - **Camera when the scene pass gives none** (Crash 1's Cortex boss, sparse map views): derive it from Crash's
   own skinned buffer. VP = World⁻¹ · WVP of the 4016-byte player buffer. In normal levels it equals the scene
   camera exactly, so use it only as a fallback. Also accept a lone camera candidate written ≥ 3 times/frame,
@@ -237,17 +248,18 @@ feel and attacks.
   land clips.
 - **Croc's moveset only:**
   - Crash reads keyboard and mouse through user32, not DirectInput: its DirectInput object only serves pads,
-    and no raw input is registered. So patch the exe's imports `GetKeyboardState`, `GetKeyState` and
-    `XInputGetState`, and subclass the game window.
+    and no raw input is registered. So hook `GetKeyboardState`, `GetKeyState` and `XInputGetState` in the
+    running process's import table (the exe on disk stays untouched), and subclass the game window.
   - **Hide Crash-only moves:** crouch/slide/body slam (right mouse; pad B and RT), Speed Shoes (Shift),
     bazooka (Q), the air spin, and the Crash 3 double jump.
   - **Croc's stomp:** a second jump in the air presses Crash's slide button for 150 ms. The engine's body
     slam then breaks what's below and shows the impact dust.
   - **Edges:** take key edges from `GetAsyncKeyState`. The game's own sources disagree for a few ms and
     create fake re-presses.
-- **Test tooling:** `um win drive "idle N"` doesn't wait; it reports seconds since the last input. Use
-  `sleep <ms>` inside one drive call for timed combos. Separate drive calls are too slow: each one starts
-  PowerShell.
+- **Test tooling:** `um win drive "idle N"` doesn't wait; it reports seconds since the last input. For timed
+  combos, put the whole combo in one drive call: separate calls are too slow, because each one starts
+  PowerShell. Pauses inside a call need the `sleep <ms>` verb from #206; without it, use `hold <vk> <ms>` or
+  drive `um.win.Drive` from Python with `time.sleep` between commands.
 - **Verified with the user's completed saves:** Crash 1's island map, the Cortex boss, Upstream (water) and
   Hog Wild; Crash 2's warp room and Hang Eight on foot.
 
@@ -261,5 +273,5 @@ About one day of agent time over three sessions, with the human mostly away.
 ## Open questions
 - **Native port follow-ups:** a character-select UI (F6 only now), Crash 2/3 vehicles and Coco levels, bonus rounds,
   gamepad filter verification with a real controller, user rebinding support.
-- **Remaining issues:**
-  - pose lag of 1–3 frames during fast camera moves (reproject);
+- **Remaining issues (live mashup):**
+  - pose lag of 1–3 frames during fast camera moves (reproject).
