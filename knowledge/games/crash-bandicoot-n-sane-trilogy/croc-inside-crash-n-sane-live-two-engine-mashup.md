@@ -7,7 +7,7 @@ game_version: 'Steam 731490, exe PE timestamp 2018-07-19 (sha256 170c61d3...6af3
 platform: windows
 engine: native
 route: passthrough
-tools: [ReShade 6.8.0 add-on build, Ultimate ASI Loader v9.7.4 (version.dll, Croc), MSVC 14.44, capstone, pefile]
+tools: ["ReShade 6.8.0 add-on build", "Ultimate ASI Loader v9.7.4 (version.dll, Croc)", "MSVC 14.44", "capstone", "pefile"]
 anti_cheat: none (Crash exe is SteamStub-wrapped; only the running process was hooked)
 status: working
 agents:
