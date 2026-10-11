@@ -30,6 +30,8 @@ the game window's **client area**.
 - Keyboard: `key <vk> [tap|down|up]`, `hold <vk> <ms>`, `type <text>`, `scanmode on` (DirectInput /
   raw-input games that ignore virtual-key events).
 - Window: `focus`, `rect`, `size <w> <h>` (sets the client size), `title`, `fg`, `idle`, `untop`.
+- Timing: `sleep <ms>` waits between steps in one call. Each `um win drive` call starts PowerShell (1-2 s),
+  so put timed combos in one call.
 - Virtual-key codes: Esc 0x1B, Enter 0x0D, Space 0x20, W/A/S/D 0x57/0x41/0x53/0x44, F1 0x70, Shift 0x10,
   Ctrl 0x11, arrows 0x25-0x28.
 
