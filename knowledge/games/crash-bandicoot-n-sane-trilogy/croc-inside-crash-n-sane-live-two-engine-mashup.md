@@ -301,6 +301,24 @@ feel and attacks.
   - At runtime each texture bound to pixel-shader slot 0 is recognised once (by size, then a GPU read-back of
     the same blocks), and the stand-in is bound in its place for that draw. The badge's small face is the next
     hero: when Croc plays, Coco's head shows Crash.
+- **Crash's props and effects around Croc:**
+  - Crash's idle "timeout" animations (yo-yo, fruit juggling, a spin), his spin (hands swirl, Death Tornado ring)
+    and the super body slam bring their own models and particles. They aren't part of the player draw, so hide
+    them separately.
+  - **Models by index count:** an IGZ model's `igIndexBuffer` objects hold the index count at +0x10, so the
+    counts of every Crash prop can be read from the archives. Hide each group only in its moment and near the
+    player, so scenery sharing a count stays.
+  - **Particles by texture:** their vertex counts change every frame, and they're drawn in later passes. Follow
+    Crash's effect files (`vfx/Characters/Playable/Crash/Crash_Attack_*`, `Crash_Timeout_*`) to their textures,
+    hash those, and hide draws that sample them right after an attack or stomp, or after a long idle.
+  - One idle draws Crash's whole body again in a later pass (a fruit-goo overlay): hide his body meshes near the
+    player in every pass, not only the G-buffer pass.
+  - **Finding them:** learn every draw signature (count, vertex shader, texture) in normal play and log the ones
+    that appear only after an attack, a stomp or a long idle. Read texture info at draw time: a view saved for
+    later may already be freed (that crashed the game once).
+  - **Mount detection** must count only mount meshes (hog, jet-board, polar bear): crates and platforms under
+    the player otherwise switch Croc into his riding pose.
+  - **Death Tornado:** hold back a second attack press within 0.9 s; Crash chains spins into the tornado.
 - **Test tooling:** `um win drive "idle N"` doesn't wait; it reports seconds since the last input. For timed
   combos, put the whole combo in one drive call: separate calls are too slow, because each one starts
   PowerShell. Pauses inside a call need the `sleep <ms>` verb from #206; without it, use `hold <vk> <ms>` or
