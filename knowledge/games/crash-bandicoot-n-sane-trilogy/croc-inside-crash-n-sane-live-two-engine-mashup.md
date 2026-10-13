@@ -296,7 +296,9 @@ feel and attacks.
     - the lives counter: `ui/Crash/crashtoken` plus its line layer `crashtoken2`, used by
       `vfx/UI/Crash_Life_GUI`;
     - Crash 3's level card: a cell of `Boss_Portraits/character_sheet_filmstrip`, drawn in the scene pass;
-    - the biplane health bar: `PilotHUD/Pilot-Crash-Portrait-2`.
+    - the biplane health bar: `PilotHUD/Pilot-Crash-Portrait-2`;
+    - Crash 3's pause screen: a Crash & Coco sticker painted on the left panel (`Pause/Crash3/BG_Left`). Its
+      stand-in is that panel with the sticker painted out and a Croc sticker on it.
   - A script hashes their 16×16 centre blocks from the user's archives. It builds Croc's stand-ins from his own
     remaster lives icon (`remaster/ui/panel/croclife.tga`), outlined in black and framed like each original,
     into the local cache.
