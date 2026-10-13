@@ -265,10 +265,12 @@ feel and attacks.
     (other buffers, another vertex shader) and the vehicle (one vertex shader with the most draws there).
   - **What to hide:** everything at the player except the vehicle's shader. Croc then sits in the cockpit, and
     the pause preview shows it too.
-  - **The vehicle's shader also draws some pilot parts** (the motorbike: Crash's ears, fur collar and gloves).
-    Hide those by index count; Crash's on-foot body meshes use the same counts in every vehicle.
-  - **Plane deaths:** the parachute comes down without Croc. Crash's aviator scarf stays on Croc (it isn't
-    drawn as part of the player).
+  - **The vehicle's shader also draws the pilot's outfit** (the motorbike's ears, fur collar and gloves; the
+    biplane's scarf, goggles and cap). Hide it by the index counts of `CrashBiker.igz` / `CrashAviator.igz`;
+    Crash's on-foot body meshes use the same counts in every vehicle.
+  - **Plane deaths:** the parachute pack mesh on the pilot's back is also the canopy once the parachute opens:
+    hide it only while flying. The game keeps the body's World where the plane was hit and moves the body with
+    its skinning matrices, so Croc isn't placed under the canopy yet; the parachute comes down empty.
 - **Which area is loaded:** patch the exe's `CreateFileW`/`CreateFileA` imports and note the area archive it
   opens (`l100_hub.pak`, `l200_hub.pak`, `l300_hub.pak`, `l322_orangeasphalt.pak` ..., in lower case). The
   `*_hub` archives are the level-select screens. The archives also tell which levels are vehicle levels
@@ -281,9 +283,9 @@ feel and attacks.
     all three games (Crash 22461, 9528, 5694, 4092; Coco 18288, 10614, 10404, 8256).
   - **Coco → Croc:** let the game swap back to Crash, hide the Crash who drops in (his meshes by index count,
     wherever drawn: he falls in from above, away from the player position) and draw Croc in his place.
-  - **Croc → Crash:** Croc spins out upwards. The game swaps to Coco, who stays hidden, and the add-on presses
-    the swap again until the game takes it, about 1 s later, once Coco has landed. Press with the device the
-    player used (Ctrl, or R2 in `XInputGetState`).
+  - **Croc → Crash:** Croc stays where he stood while the game swaps to Coco, who stays hidden. The add-on
+    presses the swap again until the game takes it (about 1 s later, once Coco has landed), and Croc spins out
+    upwards as Crash drops in. Press with the device the player used (Ctrl, or R2 in `XInputGetState`).
   - **No Coco yet** (no hero badge on screen): the press swaps Crash and Croc directly, with the spin effect.
   - Croc only stands in for Crash: while the game's hero is Coco, she is shown.
   - The island map draws the hero 1.4× larger (read the scale from the World matrix), and the level node under
