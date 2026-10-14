@@ -179,5 +179,7 @@ One afternoon session, including the frame-rate work.
 
 ## Open questions
 - Does a real boss win set 0x800 at the kill or at the level exit? It only changes when the card appears.
-- Crash 1 has six bosses for five powers. Which boss should give none is a design choice; here, Papu Papu
-  (Crash 1's slide and body slam are always on).
+- Crash 1 has six bosses for five powers, so one gives none. The first table skipped Papu Papu (Crash 1's slide
+  and body slam are always on), and players then missed a power after the first boss. Now Crash 1 follows Crash
+  3's order from the first boss (Papu Papu → super body slam … N. Brio → speed shoes), and Cortex, the final boss,
+  gives none.
