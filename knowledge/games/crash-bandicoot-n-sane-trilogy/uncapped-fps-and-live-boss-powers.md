@@ -106,6 +106,19 @@ tags: [alchemy-engine, reshade-addon, frame-rate, timer-resolution, game-variabl
     | U+E006 | Speed Shoes |
 
     Action names are from `guisystemdata_en.lng`.
+- **The game's bitmap fonts** (`fonts/*.igz`):
+  - Zoinks is the slanted Crash title face, GeekSpeak the menu body face, both with 4K versions in
+    `4ktextures_essentialui.pak`.
+  - Each is an `igBitmapFont` (line height in pixels at +0x18), one `igCharMetrics` per character (64 bytes:
+    +0x10 code, +0x14 left bearing, +0x18 right bearing, +0x1c advance, +0x28/+0x2c cell size,
+    +0x30 u0 v0 u1 v1, top-down) and an uncompressed RGBA atlas (`igImage2`: w/h u16 at +0x18, byte size at +0x38,
+    data ref at +0x40 into the file's third section).
+  - The `*_Outline` variants bake a black edge around white glyphs, so a tint can colour fill and edge
+    separately. A second page holds the pad-button icons.
+- **UI panels:** `juicedomain_permanent.pak` has the per-game menu materials as BC3 textures (stored upside down):
+  - Crash 1: its wood Save/Load popup and plank signs.
+  - Crash 2: its stone panel pieces.
+  - Crash 3: its metal popup.
 
 ## Build steps
 1. **Add-on module (`host_powers.cpp`), every 0.25 s while the area is Crash 1 or 2:**
@@ -117,8 +130,12 @@ tags: [alchemy-engine, reshade-addon, frame-rate, timer-resolution, game-variabl
    the area just before the current one was the arena (within 5 min). A boss win goes arena → outro cinematic →
    map, and the cinematic's archive is no area. Show the card once the game is in play (camera and player found,
    not frozen) for 0.8 s.
-3. **Card art:** a Python script renders the cards from the user's archives (icon + text, premultiplied RGBA,
-   2160p scale) into a local cache.
+3. **Card art:** a Python script renders the cards from the user's archives into a local cache (premultiplied
+   RGBA, 2160p scale):
+   - Crash 1's wood popup, 9-sliced wide, with a plank sign "NEW POWER!" on its top edge.
+   - The power's name in Zoinks (yellow to orange).
+   - The how-to in GeekSpeak, keys in yellow brackets like the game's own prompts.
+   - The first version used Windows fonts on a flat box; the user found it ugly next to the game's UI.
 4. **Drawing:** at present, in its own `ID3DDeviceContextState`. The textures follow the back buffer's sRGB-ness
    and get mips for smaller screens. Unbind the render target before swapping the state back (gotcha 8).
 5. **Frame rate (`host_fps.cpp`):**
@@ -171,8 +188,8 @@ tags: [alchemy-engine, reshade-addon, frame-rate, timer-resolution, game-variabl
 
 ## Assets
 - No generated assets.
-- **The card:** rendered from the user's own archives at run time: Crash 3's icons and localized strings, with
-  Impact / Arial Black from Windows. The cache stays local.
+- **The card:** built from the user's own archives: Crash 3's icons and localized strings, the game's fonts and
+  Crash 1's wood popup. The cache stays local.
 
 ## Cost and time
 One afternoon session, including the frame-rate work.
