@@ -31,11 +31,13 @@ tags: [alchemy-engine, reshade-addon, frame-rate, timer-resolution, game-variabl
 > - **Powers:** switched in memory, checked through their effect in game and in the saved file.
 > - **Card:** shown in a boss arena.
 >
-> A real boss kill was simulated: the beaten flag was flipped in memory.
+> No boss was actually fought: each kill was simulated by flipping the beaten flag in memory.
 
 ## Setup
 - Steam build, Windows 11, borderless window, 240 Hz display.
-- A ReShade 6.8 add-on loaded by the game (the same add-on as the Croc mashup note links).
+- A ReShade 6.8 add-on loaded by the game (the same add-on as the
+  [Croc mashup note](croc-inside-crash-n-sane-live-two-engine-mashup.md)). The SteamStub-wrapped exe is never
+  changed on disk; every patch below is made in the running process after start-up.
 - Crash 1 and 2 only use Crash 3's power variables after an archive patch removes the "Crash 3 only" checks. The
   author's personal mod did that; it is not part of this note.
 
@@ -161,6 +163,8 @@ tags: [alchemy-engine, reshade-addon, frame-rate, timer-resolution, game-variabl
 - **Not verified:**
   - When a real boss win sets the flag (at the kill or at the level exit).
   - The Crash 2 card in play. Crash 2's records and silent grant were verified.
+  - The current Crash 1 table (see Open questions). The grants above match the first table (Koala Kong → double
+    jump, Cortex → speed shoes); the re-ordered one isn't recorded as re-run in game.
 
 ## Gotchas
 1. **Max FPS stuck near 64 with every setting above 60.** **Cause:** the 15.6 ms Windows timer. **Fix:**

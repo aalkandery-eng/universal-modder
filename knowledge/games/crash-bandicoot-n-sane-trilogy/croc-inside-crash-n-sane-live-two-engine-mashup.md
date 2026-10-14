@@ -271,10 +271,12 @@ feel and attacks.
   - **Plane deaths:** the parachute pack mesh on the pilot's back is also the canopy once the parachute opens:
     hide it only while flying. The game keeps the body's World where the plane was hit and moves the body with
     its skinning matrices, so Croc isn't placed under the canopy yet; the parachute comes down empty.
-- **Which area is loaded:** patch the exe's `CreateFileW`/`CreateFileA` imports and note the area archive it
-  opens (`l100_hub.pak`, `l200_hub.pak`, `l300_hub.pak`, `l322_orangeasphalt.pak` ..., in lower case). The
-  `*_hub` archives are the level-select screens. The archives also tell which levels are vehicle levels
-  (`CrashBiker`/`CrashAviator` actors) and which are Coco-only (Crash 3 tiger and jet-ski levels).
+- **Which area is loaded:** patch the running exe's `CreateFileW`/`CreateFileA` import entries (the file on
+  disk stays untouched) and note the area archive it opens (`l100_hub.pak`, `l200_hub.pak`, `l300_hub.pak`,
+  `l322_orangeasphalt.pak` ..., in lower case). The `*_hub` archives are the level-select screens. The archives
+  also tell which levels are vehicle levels (`CrashBiker`/`CrashAviator` actors) and which are Coco-only (Crash 3
+  tiger and jet-ski levels). The same hook drives
+  [uncapped FPS and live boss powers](uncapped-fps-and-live-boss-powers.md).
 - **Hero swap (Crash → Coco → Croc):**
   - The game swaps Crash and Coco with R2 (keyboard Ctrl) on Crash 1's island map and the Crash 2/3 warp rooms,
     once Coco is unlocked. The hero crouches and spins up in a swirl, and the other one drops in (about 1 s).
