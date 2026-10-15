@@ -1825,6 +1825,52 @@
   ]
  },
  {
+  "path": "games/digimon-world-3/digimon-world-3-pc-port-16-9-hud-an-in-game-companion-and-a-vram-wide-clear.md",
+  "kind": "game",
+  "title": "Digimon World 3 PC port, part 2: a 16:9 HUD at the edges, an in-game companion from the decomp, and a VRAM-wide clear",
+  "game": "Digimon World 3",
+  "games_also": [],
+  "game_version": "PS1 USA, SLUS-01436, from the user's own disc (CHD)",
+  "platform": "windows",
+  "engine": "unknown",
+  "route": "decomp-recomp",
+  "tools": [
+   "ReGame-Labs/dw3_decomp (MIT)",
+   "Wyrelade/DW2-PC PC layer (CC0)",
+   "WinLibs i686 GCC 16.2",
+   "SDL3 3.4.18",
+   "Dear ImGui",
+   "gdb",
+   "ComfyUI (Flux.1-dev)"
+  ],
+  "anti_cheat": "none (single-player PS1 game)",
+  "status": "working",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-16",
+  "links": [
+   "https://github.com/ReGame-Labs/dw3_decomp",
+   "https://github.com/jeanheck/digivice",
+   "https://github.com/rsigristc/dw2003-qol-patch"
+  ],
+  "tags": [
+   "psx",
+   "ps1",
+   "decompilation",
+   "native-port",
+   "psyq",
+   "widescreen",
+   "hud",
+   "companion",
+   "quests",
+   "fast-travel",
+   "240hz",
+   "debugging"
+  ]
+ },
+ {
   "path": "games/dishonored/ghost-co-op-ue3-reflection-postrender-hook.md",
   "kind": "game",
   "title": "Ghost co-op for Dishonored (2012): UE3 reflection, PostRender hook, UDP puppet",
