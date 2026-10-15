@@ -1695,6 +1695,46 @@
   ]
  },
  {
+  "path": "games/digimon-world-2/digimon-world-2-pc-port-240-hz-game-logic-over-a-30-fps-task.md",
+  "kind": "game",
+  "title": "Digimon World 2 PC port: 240 Hz game logic over a 30 fps task engine, with the game frames unchanged",
+  "game": "Digimon World 2",
+  "games_also": [
+   "Digimon World 3"
+  ],
+  "game_version": "PS1 USA, SLUS-01193; Wyrelade/DW2-PC v0.2.1 (64feb636) plus local changes",
+  "platform": "windows",
+  "engine": "unknown",
+  "route": "decomp-recomp",
+  "tools": [
+   "Wyrelade/DW2-PC v0.2.1 (CC0)",
+   "WinLibs i686 GCC 16.2 + gdb",
+   "SDL3 3.4.18"
+  ],
+  "anti_cheat": "none (single-player PS1 game)",
+  "status": "working",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-15",
+  "links": [
+   "https://github.com/Wyrelade/DW2-PC"
+  ],
+  "tags": [
+   "psx",
+   "ps1",
+   "decompilation",
+   "native-port",
+   "high-refresh",
+   "240hz",
+   "game-logic",
+   "determinism",
+   "replay",
+   "task-system"
+  ]
+ },
+ {
   "path": "games/digimon-world-2/digimon-world-2-pc-port-dw2-pc-reading-a-chd-and-rips-with-t.md",
   "kind": "game",
   "title": "Digimon World 2 PC port (DW2-PC): reading a .chd, and rips with the movies taken out",
