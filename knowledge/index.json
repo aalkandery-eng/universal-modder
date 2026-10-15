@@ -1695,6 +1695,47 @@
   ]
  },
  {
+  "path": "games/digimon-world-2/digimon-world-2-pc-port-dw2-pc-reading-a-chd-and-rips-with-t.md",
+  "kind": "game",
+  "title": "Digimon World 2 PC port (DW2-PC): reading a .chd, and rips with the movies taken out",
+  "game": "Digimon World 2",
+  "games_also": [],
+  "game_version": "PS1 USA, SLUS-01193 (SLUS_011.93 SHA-1 e55ed5bf354def07f0cbf4e1fb7fb5f99204f220); DW2-PC v0.2.1 (64feb636)",
+  "platform": "windows",
+  "engine": "unknown",
+  "route": "decomp-recomp",
+  "tools": [
+   "Wyrelade/DW2-PC v0.2.1 (CC0)",
+   "libchdr 0.3.0",
+   "WinLibs i686 GCC 16.2 (CMake + Ninja bundled)",
+   "SDL3 3.4.18",
+   "chdman 0.289"
+  ],
+  "anti_cheat": "none (single-player PS1 game)",
+  "status": "working",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-15",
+  "links": [
+   "https://github.com/Wyrelade/DW2-PC",
+   "https://github.com/rtissera/libchdr"
+  ],
+  "tags": [
+   "psx",
+   "ps1",
+   "decompilation",
+   "native-port",
+   "chd",
+   "libchdr",
+   "disc-image",
+   "rip",
+   "fmv-stripped",
+   "xa-audio"
+  ]
+ },
+ {
   "path": "games/digimon-world-3/a-native-pc-port-of-digimon-world-3-from-its-matching-decomp.md",
   "kind": "game",
   "title": "A native PC port of Digimon World 3 from its matching decompilation, with 240 Hz game logic",
