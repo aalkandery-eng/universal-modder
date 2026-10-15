@@ -1695,6 +1695,55 @@
   ]
  },
  {
+  "path": "games/digimon-world-3/a-native-pc-port-of-digimon-world-3-from-its-matching-decomp.md",
+  "kind": "game",
+  "title": "A native PC port of Digimon World 3 from its matching decompilation, with 240 Hz game logic",
+  "game": "Digimon World 3",
+  "games_also": [],
+  "game_version": "PS1 USA, SLUS-01436 (SLUS_014.36 SHA-1 444653259f78ddb483fd22af72cce9276f42f214), from the user's own disc (CHD)",
+  "platform": "windows",
+  "engine": "unknown",
+  "route": "decomp-recomp",
+  "tools": [
+   "ReGame-Labs/dw3_decomp (MIT)",
+   "Wyrelade/DW2-PC PC layer (CC0)",
+   "WinLibs i686 GCC 16.2",
+   "SDL3 3.4.18",
+   "CMake + Ninja",
+   "libchdr 0.3.0",
+   "gdb",
+   "SwarmUI (ComfyUI 0.24, SDXL, tile ControlNet)",
+   "Real-ESRGAN ncnn-vulkan"
+  ],
+  "anti_cheat": "none (single-player PS1 game)",
+  "status": "working",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-15",
+  "links": [
+   "https://github.com/ReGame-Labs/dw3_decomp",
+   "https://github.com/Wyrelade/DW2-PC",
+   "https://github.com/rtissera/libchdr"
+  ],
+  "tags": [
+   "psx",
+   "ps1",
+   "decompilation",
+   "native-port",
+   "psyq",
+   "high-refresh",
+   "240hz",
+   "pgxp",
+   "sub-pixel",
+   "widescreen",
+   "hd-textures",
+   "sdxl",
+   "chd"
+  ]
+ },
+ {
   "path": "games/dishonored/ghost-co-op-ue3-reflection-postrender-hook.md",
   "kind": "game",
   "title": "Ghost co-op for Dishonored (2012): UE3 reflection, PostRender hook, UDP puppet",
