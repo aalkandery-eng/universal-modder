@@ -2899,6 +2899,58 @@
   ]
  },
  {
+  "path": "games/insaniquarium-deluxe/an-android-port-of-insaniquarium-deluxe-from-the-winfish-decompilation.md",
+  "kind": "game",
+  "title": "An Android port of Insaniquarium Deluxe from the WinFish decompilation on PopLib (SDL3)",
+  "game": "Insaniquarium Deluxe",
+  "games_also": [],
+  "game_version": "Steam app 3320, Insaniquarium.exe md5 1314be36cbd1d79a6816c48b273a5b22 (decomp targets 1.1); assets from the user's own copy",
+  "platform": "other",
+  "engine": "native",
+  "route": "decomp-recomp",
+  "tools": [
+   "Vindirect/WinFish decompilation (61ddba1)",
+   "SaMeiers/insaniquarium-port (AGPL-3.0, 95d4aaf)",
+   "SaMeiers/PopLib fork (SDL3 rewrite of SexyAppFramework, 45776ce)",
+   "libopenmpt 0.8.9",
+   "Android NDK r27d (27.3.13750724)",
+   "Android SDK cmdline-tools 23.0 / android CLI",
+   "CMake 4.1.2",
+   "Gradle 8.12 + AGP 8.7.3",
+   "JDK 22",
+   "Visual Studio 2022 (desktop test build)"
+  ],
+  "anti_cheat": "none (offline single-player game)",
+  "status": "in-progress",
+  "agents": [
+   "Claude Code (Opus 5.5)"
+  ],
+  "humans": [],
+  "date": "2026-10-16",
+  "links": [
+   "https://github.com/vindirect/winfish",
+   "https://github.com/SaMeiers/insaniquarium-port",
+   "https://github.com/SaMeiers/PopLib",
+   "https://github.com/teampopwork/poplib",
+   "https://lib.openmpt.org/libopenmpt/"
+  ],
+  "tags": [
+   "android",
+   "apk",
+   "popcap",
+   "sexyapp",
+   "sexyappframework",
+   "poplib",
+   "sdl3",
+   "decompilation",
+   "native-port",
+   "touch",
+   "lifecycle",
+   "ndk",
+   "headless-testing"
+  ]
+ },
+ {
   "path": "games/just-cause-3/vehicle-mesh-editing-added-geometry-loads-with-matching-toc.md",
   "kind": "game",
   "title": "Vehicle mesh editing: added geometry loads with a matching .ee.toc",
