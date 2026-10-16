@@ -2901,7 +2901,7 @@
  {
   "path": "games/insaniquarium-deluxe/an-android-port-of-insaniquarium-deluxe-from-the-winfish-decompilation.md",
   "kind": "game",
-  "title": "An Android port of Insaniquarium Deluxe from the WinFish decompilation on PopLib (SDL3)",
+  "title": "An Android port of Insaniquarium Deluxe from the WinFish decompilation on PopLib (SDL3), widescreen for a foldable and a tablet",
   "game": "Insaniquarium Deluxe",
   "games_also": [],
   "game_version": "Steam app 3320, Insaniquarium.exe md5 1314be36cbd1d79a6816c48b273a5b22 (decomp targets 1.1); assets from the user's own copy",
@@ -2918,7 +2918,8 @@
    "CMake 4.1.2",
    "Gradle 8.12 + AGP 8.7.3",
    "JDK 22",
-   "Visual Studio 2022 (desktop test build)"
+   "Visual Studio 2022 (desktop test build)",
+   "Qwen-Image-Edit 2509 fp8 + Lightning 8-step LoRA in ComfyUI 0.24 (wide art)"
   ],
   "anti_cheat": "none (offline single-player game)",
   "status": "in-progress",
@@ -2947,7 +2948,15 @@
    "touch",
    "lifecycle",
    "ndk",
-   "headless-testing"
+   "headless-testing",
+   "widescreen",
+   "aspect-ratio",
+   "foldable",
+   "galaxy-z-fold7",
+   "tablet",
+   "galaxy-tab-s11-ultra",
+   "outpainting",
+   "qwen-image-edit"
   ]
  },
  {

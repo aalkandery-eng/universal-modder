@@ -1,13 +1,13 @@
 ---
 kind: game
-title: An Android port of Insaniquarium Deluxe from the WinFish decompilation on PopLib (SDL3)
+title: An Android port of Insaniquarium Deluxe from the WinFish decompilation on PopLib (SDL3), widescreen for a foldable and a tablet
 game: Insaniquarium Deluxe
 games_also: []
 game_version: "Steam app 3320, Insaniquarium.exe md5 1314be36cbd1d79a6816c48b273a5b22 (decomp targets 1.1); assets from the user's own copy"
 platform: other
 engine: native
 route: decomp-recomp
-tools: ["Vindirect/WinFish decompilation (61ddba1)", "SaMeiers/insaniquarium-port (AGPL-3.0, 95d4aaf)", "SaMeiers/PopLib fork (SDL3 rewrite of SexyAppFramework, 45776ce)", "libopenmpt 0.8.9", "Android NDK r27d (27.3.13750724)", "Android SDK cmdline-tools 23.0 / android CLI", "CMake 4.1.2", "Gradle 8.12 + AGP 8.7.3", "JDK 22", "Visual Studio 2022 (desktop test build)"]
+tools: ["Vindirect/WinFish decompilation (61ddba1)", "SaMeiers/insaniquarium-port (AGPL-3.0, 95d4aaf)", "SaMeiers/PopLib fork (SDL3 rewrite of SexyAppFramework, 45776ce)", "libopenmpt 0.8.9", "Android NDK r27d (27.3.13750724)", "Android SDK cmdline-tools 23.0 / android CLI", "CMake 4.1.2", "Gradle 8.12 + AGP 8.7.3", "JDK 22", "Visual Studio 2022 (desktop test build)", "Qwen-Image-Edit 2509 fp8 + Lightning 8-step LoRA in ComfyUI 0.24 (wide art)"]
 anti_cheat: "none (offline single-player game)"
 status: in-progress
 agents:
@@ -20,15 +20,18 @@ links:
 - "https://github.com/SaMeiers/PopLib"
 - "https://github.com/teampopwork/poplib"
 - "https://lib.openmpt.org/libopenmpt/"
-tags: [android, apk, popcap, sexyapp, sexyappframework, poplib, sdl3, decompilation, native-port, touch, lifecycle, ndk, headless-testing]
+tags: [android, apk, popcap, sexyapp, sexyappframework, poplib, sdl3, decompilation, native-port, touch, lifecycle, ndk, headless-testing, widescreen, aspect-ratio, foldable, galaxy-z-fold7, tablet, galaxy-tab-s11-ultra, outpainting, qwen-image-edit]
 ---
-# An Android port of Insaniquarium Deluxe from the WinFish decompilation on PopLib (SDL3)
+# An Android port of Insaniquarium Deluxe from the WinFish decompilation on PopLib (SDL3), widescreen for a foldable and a tablet
 
 > Insaniquarium Deluxe (PopCap, 2004) as a native arm64/armv7 Android APK, built from the community WinFish
 > decompilation on PopLib, an SDL3 rewrite of PopCap's SexyAppFramework, with the player's own Steam files packed
 > into a local-only APK. The existing community port had an Android target that did not build from git. This
 > work completed it and added what a phone needs: fullscreen, the back button, saving when Android backgrounds the
-> app, no keyboard popping up at launch, two-finger "collect all coins", and a launcher icon.
+> app, no keyboard popping up at launch, two-finger "collect all coins", and a launcher icon. It also fills any
+> screen shape instead of letterboxing. On the Fold7 cover (21:9) and the Tab S11 Ultra (16:10) the tank gets
+> wider and the fish use all of it; on the Fold7 inner screen (~10:9) it shows more floor. The game refits live
+> when the Fold changes screens, and the sides are AI-extended art made from the player's own pictures.
 >
 > The APK passes static checks, and the same code was played headless on a desktop build through a scripted
 > test driver. It has **not** run on a phone or emulator yet: this PC has no hypervisor, and the user sideloads it.
@@ -127,6 +130,58 @@ reimplementation would have repeated all of that. Running the Windows exe under 
 7. Optional launcher icon: draw the large guppy from the player's own `smallswim.gif` over `aquarium1.jpg`
    water into a gitignored res dir. Choose it with a gradle `manifestPlaceholders` entry, so the tree still
    builds with the stock icon when it hasn't been generated.
+8. Add `android:appCategory="game"` so Samsung's Game Launcher lists the app.
+
+## Widescreen for a foldable and a tablet
+The user plays on a Galaxy Z Fold7 and a Galaxy Tab S11 Ultra, so a 4:3 picture between black bars was not
+good enough. Their screens in landscape, and the screen size the game gets:
+
+| Screen | Pixels | Aspect | Game screen |
+|---|---|---|---|
+| Fold7 cover | 2520×1080 | 21:9 | 1120×480 |
+| Tab S11 Ultra | 2960×1848 | 16:10 | 768×480 |
+| Fold7 inner | 2184×1968 | ~10:9 | 640×576 |
+
+- **PopLib side.** SexyAppFramework already supports a display larger than the game: `mScreenBounds` and
+  `WidgetManager::Resize(mouseDestRect, mouseSourceRect)` translate all widget drawing and remap the mouse. So
+  the game keeps its 640×480 coordinates everywhere, and the margins are simply at negative x, past x 640 and
+  past y 480.
+  - The fork had an unused `mWidescreenAware` flag; it now sizes the screen to the display's aspect up to a
+    maximum (1200×640). Extra width is split left/right; extra height goes below, so the HUD bar stays at the
+    top.
+  - The screen is refitted on every `SDL_EVENT_WINDOW_(PIXEL_SIZE_CHANGED|RESIZED)`, because the Fold moves a
+    running app between its two screens. `SDLInterface::SetScreenSize` recreates the screen texture.
+  - The game draws the margins through a hook. If it doesn't, the interface fills them at present time with a
+    dimmed mirror image of the screen's edges, faded to black outward. It can't be done inside the frame:
+    a texture can't be both the source and the target of a copy.
+- **Game side, as one fixup script with exact match counts.** About 60 x bounds become `WIDE_L(n)` / `WIDE_R(n)`
+  (n minus the left margin, or plus the right one). That covers fish and breeders 10–540, large fish 0–480,
+  aliens, missiles, pets, food and larvae, the `rand % 520 + 20` spawns (15 places), and tap-to-feed 31–586.
+  - **Not edges, so left alone:** 550 in Coin, Larva and part of Food (where collected things fly, i.e. the
+    money counter); Fish's 250/175 swim pattern around the middle; the bubble machine's and alien attractor's
+    fixed spots, which sit on scenery.
+  - **Drawing the tank.** The background is drawn wide; its glass panes (x 0–32 and 610–639 in all six
+    pictures) are redrawn at the screen's edges. The water-surface wave pieces stay at the edges with the
+    middle cel tiled between, cut rather than overlapped because the waves are additive. The floor light is
+    tiled and the shadow mask mirrored.
+  - **HUD and taps.** The HUD bar is extended with a 5-px slice of plain brass and capped with its frame edges.
+    The bottom text moves to the screen's bottom. The board widget gets negative `mMouseInsets`, so taps in the
+    margins feed.
+  - Fish and aliens are top-level widgets, so they draw and take taps in the margins with no further changes.
+    The board and its overlay widget set a clip rect larger than themselves (`Graphics::SetClipRect` only
+    intersects with the screen).
+  - **Folding mid-game.** `Fish`/`Breeder` store their limits when created, so those are shifted by the change,
+    and anything left off screen is moved back.
+  - **Menus** stay 4:3 in the middle. The title, main menu and store draw wide art in their margins (margins
+    only: a menu isn't redrawn every frame). Everything else gets the faded reflection, and so does the bottom
+    of a tall screen.
+- **Wide art from the player's own copy.** Qwen-Image-Edit 2509 fp8 with the 8-step Lightning LoRA, in ComfyUI:
+  - Each picture loses its glass panes and goes on a 1200×480 canvas at x 280.
+  - Masked inpainting (`SetLatentNoiseMask`) paints the sides over a colour guide: the picture mirrored outward
+    and blurred.
+  - The model may repaint 44 px into the original. The original is pasted back with a 48 px fade.
+  - Each picture takes about 50–100 s on a 4090 that was also busy with another job.
+  - The pictures are drawn at runtime when present, with the mirrored scene as the fallback.
 
 ## Verification
 - **Static APK checks** (a script):
@@ -154,6 +209,13 @@ reimplementation would have repeated all of that. Running the Windows exe under 
     launch says "Welcome back" and offers "Continue game?" with the same $190 tank.
   - With Auto Collect on, each two-finger tap sent the coins on screen flying to the counter: $55 → 90 → 125
     → 160.
+- **Widescreen**, with `POPLIB_DISPLAY_SIZE` set to each device's pixels, plus the driver's `display WxH`
+  (fold or unfold) and `winshot` (the window as presented, reflections included):
+  - All three shapes reach the right screen size and play.
+  - Food dropped only in the far-left margin is found by the fish, which swim out, eat, grow ("Your fish has
+    grown!") and drop coins.
+  - Unfolding mid-tank (1120×480 → 640×576) and folding again works.
+  - The menus show their wide art on wide screens and the faded reflection below on the 10:9 screen.
 - **Not verified:** anything on a real Android device or emulator.
   - Not run there: GLES rendering, OpenSL audio and the real pause timing, touch mapping through logical
     presentation, the IME for the name field, immersive mode, and the back gesture on Android 13+.
@@ -210,14 +272,36 @@ reimplementation would have repeated all of that. Running the Windows exe under 
 13. **The Steam copy's file names don't match `resources.xml` case** (all the `sounds/*.ogg` are upper case).
     Windows doesn't care; Android's asset manager does. Run `verify-assets.py --fix-case`. It also renames the
     alpha companions `resources.xml` never names.
+14. **Widescreen: the Fold's inner screen is narrower than 4:3**, not wider: 2184×1968 is about 10:9. A
+    "widen the tank" plan alone leaves it letterboxed top and bottom. The screen has to grow in whichever
+    direction the display does. Here the extra height goes below the HUD as more floor, with the bottom row of
+    text moved down to it.
+15. **Mirroring the tank picture outward copies its glass panes into the middle of the scene,** and the big props
+    repeat (two diving helmets). Mirror only the area between the panes, then draw the panes at the screen's
+    edges.
+16. **Qwen-Image-Edit treats grey padding as part of the picture.** "Extend into the grey areas" gave back the
+    grey. Masked inpainting works: `SetLatentNoiseMask` over the VAE-encoded canvas, denoise 1.0, with the
+    padding pre-filled by a blurred mirror for colour.
+    - A strong structure in the middle (tank 6's tiki statue) still gets copied into the sides. Add "do not
+      repeat ..." to the prompt and repaint a wider band (90 px) to hide the join.
+    - Re-roll per picture: tank 5 needed "dark, murky", and one seed for tank 6 changed the palette entirely.
+17. **Only draw a menu's margins.** Drawing the whole wide picture behind a menu erases what it draws over its
+    own background (loading bar, text) on frames where the menu itself isn't redrawn.
+18. **A literal reflection below a menu shows mirrored, readable buttons.** Fade it to black away from the game
+    area so it reads as a glossy floor.
 
 ## Assets
-None generated. The launcher icon is composed at build time from the player's own `smallswim.gif` and
-`aquarium1.jpg` with Pillow. The APK contains PopCap's files, so it is for the owner's own device and must not
-be shared.
+- The launcher icon is composed at build time from the player's own `smallswim.gif` and `aquarium1.jpg` with
+  Pillow.
+- The wide pictures (six tanks; title, main menu and store) are generated locally from the player's own copy
+  with Qwen-Image-Edit, see "Widescreen".
+- The APK contains PopCap's files and these derivatives, so it is for the owner's own devices and must not be
+  shared.
 
 ## Cost and time
-About 1.5 hours of agent time in one session. The Android SDK, NDK and Gradle downloads came to about 1.3 GB.
+About 4 hours of agent time in one session, about half of it on widescreen. The Android SDK, NDK and Gradle
+downloads came to about 1.3 GB. The image work took 12 Qwen-Image-Edit runs at 50–110 s each, on the user's
+RTX 4090.
 
 ## Open questions
 - First run on a real device: GL context after a long background, OpenSL/AAudio through OpenAL Soft, the
@@ -225,4 +309,7 @@ About 1.5 hours of agent time in one session. The Android SDK, NDK and Gradle do
   gesture (`enableOnBackInvokedCallback` is unset, so key events are expected).
 - Touch targets: coins are about 30 px at 640×480. On a 1080 p phone that's around 4.5 mm, which plays fine
   by tapping but may want a larger hit radius.
-- The 4:3 game sits letterboxed on a 20:9 screen. The side bars could show the tank backdrop or the HUD.
+- On the Fold's inner screen held in portrait, the app is landscape-only, so Android letterboxes it until the
+  device is turned. The screen logic already handles any shape (640×640 at most), so the orientation could be
+  freed on near-square screens.
+- The Fold7 cover screen's camera hole sits at one landscape edge, inside the widened tank.
