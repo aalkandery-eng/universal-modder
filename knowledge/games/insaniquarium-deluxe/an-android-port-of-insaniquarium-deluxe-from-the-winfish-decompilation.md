@@ -98,7 +98,7 @@ reimplementation would have repeated all of that. Running the Windows exe under 
      `libmain.so`, and `libc++_shared.so` is found by the system linker as a DT_NEEDED.
    - **Asset packaging.** Copy the six game folders into a gitignored dir and point
      `sourceSets.main.assets.srcDirs` at it. PopLib reads them straight from the APK through
-     `SDL_IOFromFile`.
+     `SDL_IOFromFile`. The APK then holds PopCap's files, so it stays on your own devices (see Assets).
    - **BASS off** (`-DPOPLIB_WITH_BASS=OFF`), and the `libbass.so` jniLibs dir removed. PopLib prefers
      libopenmpt for the `.mo3` music anyway.
 4. `local.properties`: `sdk.dir=D:/path/to/android-sdk` (forward slashes; gotcha 4).
